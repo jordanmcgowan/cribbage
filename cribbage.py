@@ -319,7 +319,6 @@ def playGame():
                     handOver = True
 
     print "\nHand is over, time to count your cards!"
-
 def countCards():
     global player1Hand
     global player2Hand
