@@ -179,7 +179,6 @@ def throwToCrib():
             player2Score += 2
             player2HandPegs += 2
             player2TotalPegs += 2
-
 #TODO Scoring pairs and runs
 def playGame():
     print "\nTime to play the game!"
