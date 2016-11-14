@@ -5,6 +5,7 @@ import collections
 import itertools
 from itertools import groupby
 import time
+import sys
 
 cards = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
 suits = ['Hearts', 'Diamonds', 'Spades', 'Clubs']
@@ -673,6 +674,17 @@ while player1Score < 121 and player2Score < 121:
     swapDealer()
 print "\n***GAME OVER***"
 if player1Score >= 121:
-    print "\n***Player 1 wins!!!***"
+    sys.stdout.write("\n***Player 1 wins")
+    if player2Score <= 61:
+        sys.stdout.write(" with a double skunk")
+    if 121 > player2Score > 61:
+        sys.stdout.write(" with a skunk")
+    print "!!!***"
 elif player2Score >= 121:
-    print "\n***Player 2 wins!!!***"
+    sys.stdout.write("\n***Player 2 wins")
+    if player1Score <= 61:
+        sys.stdout.write(" with a double skunk")
+    if 121 > player1Score > 61:
+        sys.stdout.write(" with a skunk")
+    print "!!!***"
+    sys.stdout.flush()
