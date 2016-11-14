@@ -35,16 +35,32 @@ playCount = 0
 
 def setup():
     global humanPlayers
-    humanPlayers = input("Please enter the number of human players: ")
-    for i in range(0,humanPlayers):
-        print "Human " + str(i + 1) + " is player " + str(i + 1)
     global compPlayers
-    compPlayers = input("Please enter the number of computer players: ")
-    for i in range(0,compPlayers):
-        print "The computer is player " + str(i + 2)
     global totalPlayers
+    #Input validation for Human
+    while True:
+        try:
+            humanPlayers = int(input("Please enter the number of human players: "))
+        except StandardError:
+            print("Sorry, I didn't understand that.")
+            continue
+        else:
+            for i in range(0,humanPlayers):
+                print "Human " + str(i + 1) + " is player " + str(i + 1)
+            break
+    #Input validation for computer
+    while True:
+        try:
+            compPlayers = int(input("Please enter the number of computer players: "))
+        except StandardError:
+            print("Sorry, I didn't understand that.")
+            continue
+        else:
+            for i in range(0,compPlayers):
+                print "The computer is player " + str(i + 2)
+            break
     totalPlayers = humanPlayers + compPlayers
-
+    #Build deck
     for i in cards:
         for j in suits:
             deck.append(i + " of " + j)
