@@ -45,6 +45,9 @@ def setup():
             print("Sorry, I didn't understand that.")
             continue
         else:
+            if humanPlayers < 0:
+                print("Sorry, no negative players.")
+                continue
             for i in range(0,humanPlayers):
                 print "Human " + str(i + 1) + " is player " + str(i + 1)
             break
@@ -56,6 +59,9 @@ def setup():
             print("Sorry, I didn't understand that.")
             continue
         else:
+            if compPlayers < 0:
+                print("Sorry, no negative players.")
+                continue
             for i in range(0,compPlayers):
                 print "The computer is player " + str(i + 2)
             break
@@ -80,6 +86,9 @@ def cutForDeal():
                     print("Sorry, I didn't understand that.")
                     continue
                 else:
+                    if humanZero < 0:
+                        print("Sorry, no negative numbers.")
+                        continue
                     break
             humanZeroCard = getCard(deck[humanZero])
             while True:
@@ -89,6 +98,9 @@ def cutForDeal():
                     print("Sorry, I didn't understand that.")
                     continue
                 else:
+                    if humanZero < 0:
+                        print("Sorry, no negative numbers.")
+                        continue
                     break
             humanOneCard = getCard(deck[humanOne])
             #Human 1 won cut
@@ -109,7 +121,7 @@ def cutForDeal():
                     print("Sorry, I didn't understand that.")
                     continue
                 else:
-                    if userCut > 51:
+                    if userCut > 51 or userCut < 0:
                         print("Sorry, that card is out of range.")
                         continue
                     break
@@ -200,7 +212,7 @@ def throwToCrib():
             print("Sorry, I didn't understand that.")
             continue
         else:
-            if thrownCard1 >= len(player1Hand):
+            if thrownCard1 >= len(player1Hand) or thrownCard1 < 0:
                 print("Sorry, that card is out of range.")
                 continue
             break
@@ -214,7 +226,7 @@ def throwToCrib():
             print("Sorry, I didn't understand that.")
             continue
         else:
-            if thrownCard1 >= len(player1Hand):
+            if thrownCard2 >= len(player1Hand) or thrownCard2 < 0:
                 print("Sorry, that card is out of range.")
                 continue
             break
@@ -282,7 +294,7 @@ def playGame():
                             print("Sorry, I didn't understand that.")
                             continue
                         else:
-                            if playedCard >= len(legalCards):
+                            if playedCard >= len(legalCards) or playedCard < 0:
                                 print("Sorry, that card is out of range.")
                                 continue
                             break
