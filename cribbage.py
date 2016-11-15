@@ -546,7 +546,7 @@ def searchForRuns(hand, player):
                     if (checked[i+1]) + 1 == (checked[i+2]):
                         if (checked[i+2]) + 1 == (checked[i+3]):
                             foundRunOf4 = True
-                            for j in range(0,3):
+                            for j in range(0,4):
                                 if checked[i+j] in dups:
                                     multiplier *= 2
                             for i in range(multiplier):
@@ -591,7 +591,7 @@ def searchForRuns(hand, player):
                     if (checked[i+1]) + 1 == (checked[i+2]):
                         if (checked[i+2]) + 1 == (checked[i+3]):
                             foundRunOf4 = True
-                            for j in range(0,3):
+                            for j in range(0,4):
                                 if checked[i+j] in dups:
                                     multiplier *= 2
                             for i in range(multiplier):
