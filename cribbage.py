@@ -35,16 +35,38 @@ playCount = 0
 
 def setup():
     global humanPlayers
-    humanPlayers = input("Please enter the number of human players: ")
-    for i in range(0,humanPlayers):
-        print "Human " + str(i + 1) + " is player " + str(i + 1)
     global compPlayers
-    compPlayers = input("Please enter the number of computer players: ")
-    for i in range(0,compPlayers):
-        print "The computer is player " + str(i + 2)
     global totalPlayers
+    #Input validation for Human
+    while True:
+        try:
+            humanPlayers = int(input("Please enter the number of human players: "))
+        except StandardError:
+            print("Sorry, I didn't understand that.")
+            continue
+        else:
+            if humanPlayers < 0:
+                print("Sorry, no negative players.")
+                continue
+            for i in range(0,humanPlayers):
+                print "Human " + str(i + 1) + " is player " + str(i + 1)
+            break
+    #Input validation for computer
+    while True:
+        try:
+            compPlayers = int(input("Please enter the number of computer players: "))
+        except StandardError:
+            print("Sorry, I didn't understand that.")
+            continue
+        else:
+            if compPlayers < 0:
+                print("Sorry, no negative players.")
+                continue
+            for i in range(0,compPlayers):
+                print "The computer is player " + str(i + 2)
+            break
     totalPlayers = humanPlayers + compPlayers
-
+    #Build deck
     for i in cards:
         for j in suits:
             deck.append(i + " of " + j)
@@ -57,9 +79,29 @@ def cutForDeal():
     if totalPlayers is 2:
         #TODO
         if humanPlayers is 2:
-            humanZero = input("Human 0: Please pick a card to cut (0-51): ")
+            while True:
+                try:
+                    humanZero = int(input("Human 0: Please pick a card to cut (0-51): "))
+                except StandardError:
+                    print("Sorry, I didn't understand that.")
+                    continue
+                else:
+                    if humanZero < 0:
+                        print("Sorry, no negative numbers.")
+                        continue
+                    break
             humanZeroCard = getCard(deck[humanZero])
-            humanOne = input("Human 1: Please pick a card to cut (0-51): ")
+            while True:
+                try:
+                    humanOne = int(input("Human 1: Please pick a card to cut (0-51): "))
+                except StandardError:
+                    print("Sorry, I didn't understand that.")
+                    continue
+                else:
+                    if humanZero < 0:
+                        print("Sorry, no negative numbers.")
+                        continue
+                    break
             humanOneCard = getCard(deck[humanOne])
             #Human 1 won cut
             if cards.index(humanOneCard) > cards.index(humanZeroCard):
@@ -72,7 +114,17 @@ def cutForDeal():
                 print "\nHuman 0 won the cut, you will deal first and have the crib first"
                 player = 2
         else:
-            userCut = input("Human: Please pick a card to cut (0-51): ")
+            while True:
+                try:
+                    userCut = int(input("Human: Please pick a card to cut (0-51): "))
+                except StandardError:
+                    print("Sorry, I didn't understand that.")
+                    continue
+                else:
+                    if userCut > 51 or userCut < 0:
+                        print("Sorry, that card is out of range.")
+                        continue
+                    break
             userCutCard = getCard(deck[userCut])
             if compPlayers > 0:
                 compCut = randint(0,51)
@@ -153,11 +205,31 @@ def throwToCrib():
     global player1TotalPegs
     global player2TotalPegs
     print "\n" + str(player1Hand)
-    thrownCard1 = input("Throw some cards, Human! Pick 1-6 as to which card you would like to throw. ") - 1
+    while True:
+        try:
+            thrownCard1 = int(input("Throw some cards, Human! Pick 1-6 as to which card you would like to throw. ")) - 1
+        except StandardError:
+            print("Sorry, I didn't understand that.")
+            continue
+        else:
+            if thrownCard1 >= len(player1Hand) or thrownCard1 < 0:
+                print("Sorry, that card is out of range.")
+                continue
+            break
     cribHand.append(player1Hand[thrownCard1])
     player1Hand.pop(thrownCard1)
     print "\n" + str(player1Hand)
-    thrownCard2 = input("One more, Human! Pick 1-5 as to which other card you would like to throw. ") - 1
+    while True:
+        try:
+            thrownCard2 = int(input("One more, Human! Pick 1-5 as to which other card you would like to throw. ")) - 1
+        except StandardError:
+            print("Sorry, I didn't understand that.")
+            continue
+        else:
+            if thrownCard2 >= len(player1Hand) or thrownCard2 < 0:
+                print("Sorry, that card is out of range.")
+                continue
+            break
     cribHand.append(player1Hand[thrownCard2])
     player1Hand.pop(thrownCard2)
 
@@ -215,7 +287,17 @@ def playGame():
                         player2HandPegs += 2
                         player2TotalPegs += 2
                     print "\nLegal Cards: " + str(legalCards)
-                    playedCard = input("Play a card, Human! Pick 1-" + str(len(legalCards)) + " as to which card you would like to play. ") - 1
+                    while True:
+                        try:
+                            playedCard = int(input("Play a card, Human! Pick 1-" + str(len(legalCards)) + " as to which card you would like to play. ")) - 1
+                        except StandardError:
+                            print("Sorry, I didn't understand that.")
+                            continue
+                        else:
+                            if playedCard >= len(legalCards) or playedCard < 0:
+                                print("Sorry, that card is out of range.")
+                                continue
+                            break
                     playedValue = getCardValue(player1HandDup[playedCard])
                     playCount += int(playedValue)
                     indexInDup = player1HandDup.index(legalCards[playedCard])
@@ -332,7 +414,14 @@ def countCards():
     player1Hand.append(flipCard)
     player1Hand = sortHand(player1Hand)
     print "Player 1 hand: " + str(player1Hand)
-    guessedPoints = input("How many points do you think are in your hand? ")
+    while True:
+        try:
+            guessedPoints = int(input("How many points do you think are in your hand? "))
+        except StandardError:
+            print("Sorry, I didn't understand that.")
+            continue
+        else:
+            break
     score(player1Hand, 1, False)
     if guessedPoints is player1HandCount:
         print "\n***You got it!***\n"
@@ -349,7 +438,14 @@ def countCards():
         tmpP1Score1 = copy.deepcopy(player1Score)
         cribHand = sortHand(cribHand)
         print "\nCrib hand: " + str(cribHand)
-        guessedPoints = input("How many points do you think are in the crib? ")
+        while True:
+            try:
+                guessedPoints = int(input("How many points do you think are in the crib? "))
+            except StandardError:
+                print("Sorry, I didn't understand that.")
+                continue
+            else:
+                break
         score(cribHand, 1, True)
         tmpP1Score2 = copy.deepcopy(player1Score)
         cribDiff = tmpP1Score2 - tmpP1Score1
