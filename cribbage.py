@@ -622,7 +622,7 @@ def searchForFlush(hand, player, crib):
     flushHand.pop(flipCardIndex)
     for i in range(len(flushHand)):
         cards.append(getSuit(flushHand[i]))
-    #Fro crib
+    #For crib
     if cribHand:
         if cards[1:] == cards[:-1]:
             if getSuit(flipCard) == cards[0]:
@@ -634,7 +634,7 @@ def searchForFlush(hand, player, crib):
                     player2Score += 5
                     player2HandCount += 5
     #For player 1
-    if player == 1:
+    elif player == 1:
         if cards[1:] == cards[:-1]:
             if getSuit(flipCard) == cards[0]:
                 print "Flush for 5"
@@ -645,7 +645,7 @@ def searchForFlush(hand, player, crib):
                 player1Score += 4
                 player1HandCount += 4
     #For player 2
-    if player == 2:
+    elif player == 2:
         if cards[1:] == cards[:-1]:
             if getSuit(flipCard) == cards[0]:
                 print "Flush for 5"

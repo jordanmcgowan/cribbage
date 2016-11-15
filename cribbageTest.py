@@ -80,7 +80,46 @@ def getRunValue(card):
         value = (int)(arr[0])
     return value
 
-cribHand = ['10 of Hearts', 'Jack of Spades', 'Queen of Clubs', 'King of Diamonds', 'King of Clubs']
+def getSuit(card):
+    arr = card.split(" of ")
+    return arr[1]
+
+def searchForFlush(hand, player, crib):
+    flushHand = copy.deepcopy(hand)
+    global player1Score
+    global player1HandCount
+    #print "in flush"
+    cards = []
+    flipCardIndex = flushHand.index(flipCard)
+    flushHand.pop(flipCardIndex)
+    for i in range(len(flushHand)):
+        cards.append(getSuit(flushHand[i]))
+    #Fro crib TODO
+    if cribHand:
+        if cards[1:] == cards[:-1]:
+            if getSuit(flipCard) == cards[0]:
+                print "Flush for 5"
+                if player == 1:
+                    player1Score += 5
+                    player1Score += 5
+                if player == 2:
+                    player2Score += 5
+                    player2HandCount += 5
+    #For player 1
+    elif player == 1:
+        if cards[1:] == cards[:-1]:
+            if getSuit(flipCard) == cards[0]:
+                print "Flush for 5"
+                player1Score += 1
+                player1HandCount += 1
+            else:
+                print "Flush for 4"
+                player1Score += 4
+                player1HandCount += 4
+
+cribHand = ['10 of Hearts', 'Jack of Hearts', 'Queen of Hearts', 'King of Hearts', 'King of Clubs']
 player = 1
+flipCard = 'King of Clubs'
 
 searchForRuns(cribHand, player)
+searchForFlush(cribHand, player, True)
