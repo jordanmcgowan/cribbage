@@ -242,6 +242,8 @@ def throwToCrib():
     player2Hand.pop(compThrown2)
 
     print "\n***Flip card is the " + flipCard + "***"
+    #TODO delete this
+    print dealer
     if getCard(flipCard) == "Jack":
         print "\n~~~~~~~~~~~~Player " + str(dealer) + " got Nibs! 2 points for them~~~~~~~~~~~~"
         if dealer is 1:
@@ -269,63 +271,90 @@ def playGame():
     player2HandDup = copy.deepcopy(player2Hand)
     played = False
     playCount = 0
+    wraparoundGo = False
     while not handOver:
         print "\n***Count is at " + str(playCount) + "***"
         if player is 1:
+            #Cards in p1 hand
             if player1HandDup:
-                legalCards = getLegalCards(player1HandDup, playCount)
+                #Get legal cards to play
+                player1LegalCards = getLegalCards(player1HandDup, playCount)
+                #Last card hit 31, end round
                 if playCount is 31:
                     print "\n~~~~~~~~~~~~Player 2 hit 31! 2 points for them~~~~~~~~~~~~"
                     player2Score += 2
                     player2HandPegs += 2
                     player2TotalPegs += 2
                     playCount = 0
-                elif len(legalCards) is not 0:
+                #Player 1 has legal cards to play
+                elif player1LegalCards:
+                    #wraparoundGo = False
                     if playCount is 15:
                         print "\n~~~~~~~~~~~~Player 2 hit 15! 2 points for them~~~~~~~~~~~~"
                         player2Score += 2
                         player2HandPegs += 2
                         player2TotalPegs += 2
-                    print "\nLegal Cards: " + str(legalCards)
+                    print "\nLegal Cards: " + str(player1LegalCards)
                     while True:
                         try:
-                            playedCard = int(input("Play a card, Human! Pick 1-" + str(len(legalCards)) + " as to which card you would like to play. ")) - 1
+                            playedCard = int(input("Play a card, Human! Pick 1-" + str(len(player1LegalCards)) + " as to which card you would like to play. ")) - 1
                         except StandardError:
                             print("Sorry, I didn't understand that.")
                             continue
                         else:
-                            if playedCard >= len(legalCards) or playedCard < 0:
+                            if playedCard >= len(player1LegalCards) or playedCard < 0:
                                 print("Sorry, that card is out of range.")
                                 continue
                             break
                     playedValue = getCardValue(player1HandDup[playedCard])
                     playCount += int(playedValue)
-                    indexInDup = player1HandDup.index(legalCards[playedCard])
+                    indexInDup = player1HandDup.index(player1LegalCards[playedCard])
                     if lastPlayed:
-                        if getCard(legalCards[playedCard]) is getCard(lastPlayed):
+                        if getCard(player1LegalCards[playedCard]) is getCard(lastPlayed):
                             print "\n~~~~~~~~~~~~Player 1 played a pair! 2 points for them~~~~~~~~~~~~"
                             player1Score += 2
                             player1HandPegs += 2
                             player1TotalPegs += 2
-                    lastPlayed = legalCards[playedCard]
+                    lastPlayed = player1LegalCards[playedCard]
                     player1HandDup.pop(indexInDup)
                     player = 2
+                #Player 1 has no legal cards left
                 else:
+                    player2LegalCards = getLegalCards(player2HandDup, playCount)
                     if playCount is 15:
                         print "\n~~~~~~~~~~~~Player 2 hit 15! 2 points for them~~~~~~~~~~~~"
                         player2Score += 2
                         player2HandPegs += 2
                         player2TotalPegs += 2
-                        lastPlayed = ""
+                        lastPlayed = player1LegalCards[playedCard]
                         break
-                    print "\n~~~~~~~~~~~~Player 2 gets a go!~~~~~~~~~~~~"
-                    player2Score += 1
-                    player2HandPegs += 1
-                    player2TotalPegs += 1
-                    playCount = 0
-                    player = 1
-                    lastPlayed = ""
+                    #TODO Fix the wraparound go
+                    elif player2LegalCards:
+                        print "\n***Player 2 must play again***"
+                        if not wraparoundGo:
+                            print "\n~~~~~~~~~~~~Player 2 gets a go! 1 ~~~~~~~~~~~~"
+                            player2Score += 1
+                            player2HandPegs += 1
+                            player2TotalPegs += 1
+                            wraparoundGo = True
+                        player = 2
+                    else:
+                        if not wraparoundGo:
+                            print "\n~~~~~~~~~~~~Player 2 gets a go! 2 ~~~~~~~~~~~~"
+                            player2Score += 1
+                            player2HandPegs += 1
+                            player2TotalPegs += 1
+                            playCount = 0
+                            player = 1
+                            lastPlayed = ""
+                        else:
+                            playCount = 0
+                            player = 1
+                            lastPlayed = ""
+                            print "\n***End of the round!***"
+            #No cards in p1 hand
             else:
+                #Player 2 has no cards to play
                 if not player2HandDup:
                     if playCount is 15:
                         print "\n~~~~~~~~~~~~Player 2 hit 15! 2 points for them~~~~~~~~~~~~"
@@ -333,43 +362,52 @@ def playGame():
                         player2HandPegs += 2
                         player2TotalPegs += 2
                         break
-                        lastPlayed = ""
-                    print "\n~~~~~~~~~~~~Player 2 gets a go!~~~~~~~~~~~~"
+                        lastPlayed = player1LegalCards[playedCard]
+                    print "\n~~~~~~~~~~~~Player 1 gets a go!~~~~~~~~~~~~"
                     print "\n***Hand over***"
-                    player2Score += 1
-                    player2HandPegs += 1
-                    player2TotalPegs += 1
+                    player1Score += 1
+                    player1HandPegs += 1
+                    player1TotalPegs += 1
                     handOver = True
+                else:
+                    player = 2
+                    print "lost p1"
         elif player is 2:
             if player2HandDup:
-                legalCards = getLegalCards(player2HandDup, playCount)
+                player2LegalCards = getLegalCards(player2HandDup, playCount)
                 if playCount is 31:
                     print "\n~~~~~~~~~~~~Player 1 hit 31! 2 points for them~~~~~~~~~~~~"
                     player1Score += 2
                     player1HandPegs += 2
                     player1TotalPegs += 2
                     playCount = 0
-                elif len(legalCards) is not 0:
+                    player = 2
+                elif player2LegalCards:
+                    #wraparoundGo = False
                     if playCount is 15:
                         print "\n~~~~~~~~~~~~Player 1 hit 15! 2 points for them~~~~~~~~~~~~"
                         player1Score += 2
                         player1HandPegs += 2
                         player1TotalPegs += 2
-                    playedCard = randint(0,len(legalCards)-1)
-                    playedValue = getCardValue(legalCards[playedCard])
-                    print "\nThe computer played the " + str(legalCards[playedCard])
+                    playedCard = randint(0,len(player2LegalCards)-1)
+                    playedValue = getCardValue(player2LegalCards[playedCard])
+                    print "\nThe computer played the " + str(player2LegalCards[playedCard])
                     playCount += int(playedValue)
-                    indexInDup = player2HandDup.index(legalCards[playedCard])
+                    indexInDup = player2HandDup.index(player2LegalCards[playedCard])
+                    #TODO Check for pairs
                     if lastPlayed:
-                        if getCard(legalCards[playedCard]) is getCard(lastPlayed):
+                        if getCard(player2LegalCards[playedCard]) is getCard(lastPlayed):
                             print "\n~~~~~~~~~~~~Player 2 played a pair! 2 points for them~~~~~~~~~~~~"
                             player2Score += 2
                             player2HandPegs += 2
                             player2TotalPegs += 2
-                    lastPlayed = legalCards[playedCard]
+                    lastPlayed = player2LegalCards[playedCard]
                     player2HandDup.pop(indexInDup)
-                    player = 1
+                    if player1HandDup:
+                        player = 1
+
                 else:
+                    player1LegalCards = getLegalCards(player1HandDup, playCount)
                     if playCount is 15:
                         print "\n~~~~~~~~~~~~Player 2 hit 15! 2 points for them~~~~~~~~~~~~"
                         player1Score += 2
@@ -377,13 +415,30 @@ def playGame():
                         player1TotalPegs += 2
                         lastPlayed = ""
                         break
-                    print "\n~~~~~~~~~~~~Player 1 gets a go!~~~~~~~~~~~~"
-                    player1Score += 1
-                    player1HandPegs += 1
-                    player1TotalPegs += 1
-                    playCount = 0
-                    player = 2
-                    lastPlayed = ""
+                    #TODO Fix the wraparound go
+                    elif player1LegalCards:
+                        print "\n***Player 1 must play again***"
+                        if not wraparoundGo:
+                            print "\n~~~~~~~~~~~~Player 1 gets a go! (In wrap)~~~~~~~~~~~~"
+                            player1Score += 1
+                            player1HandPegs += 1
+                            player1TotalPegs += 1
+                            wraparoundGo = True
+                        player = 1
+                    else:
+                        if not wraparoundGo:
+                            print "\n~~~~~~~~~~~~Player 1 gets a go! (at end)~~~~~~~~~~~~"
+                            player1Score += 1
+                            player1HandPegs += 1
+                            player1TotalPegs += 1
+                            playCount = 0
+                            player = 2
+                            lastPlayed = ""
+                        else:
+                            playCount = 0
+                            player = 2
+                            lastPlayed = ""
+                            print "\n***End of the round!***"
             else:
                 if not player1HandDup:
                     if playCount is 15:
@@ -393,12 +448,15 @@ def playGame():
                         player1TotalPegs += 2
                         break
                         lastPlayed = ""
-                    print "\n~~~~~~~~~~~~Player 1 gets a go!~~~~~~~~~~~~"
+                    print "\n~~~~~~~~~~~~Player 2 gets a go! 3 ~~~~~~~~~~~~"
                     print "\n***Hand over***"
-                    player1Score += 1
-                    player1HandPegs += 1
-                    player1TotalPegs += 1
+                    player2Score += 1
+                    player2HandPegs += 1
+                    player2TotalPegs += 1
                     handOver = True
+                else:
+                    player = 1
+                    print "lost p2"
 
     print "\nHand is over, time to count your cards!"
 def countCards():
@@ -507,7 +565,6 @@ def searchForPairs(hand, player):
                 print "Quad for 12"
                 player2Score += 12
                 player2HandCount += 12
-#TODO: Support run of 5. May need 5 first, then 4, then 3
 def searchForRuns(hand, player):
     runHand = copy.deepcopy(hand)
     #print "in runs"
@@ -765,7 +822,7 @@ while player1Score < 121 and player2Score < 121:
     print "Player 2 overall points: " + str(player2Score)
     for i in range(0,7):
         print "\nShuffling the deck..."
-        time.sleep(1)
+        time.sleep(.5)
         shuffle(deck)
     swapDealer()
 print "\n***GAME OVER***"
