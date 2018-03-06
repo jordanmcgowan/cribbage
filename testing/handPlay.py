@@ -11,14 +11,14 @@ import pdb
 
 cards = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
 suits = ['Hearts', 'Diamonds', 'Spades', 'Clubs']
-player1Hand = []
-player2Hand = []
+player1Hand = ['10 of Hearts', 'Jack of Hearts', 'Queen of Hearts', 'Queen of Hearts', 'Queen of Clubs', 'King of Diamonds']
+player2Hand = ['10 of Hearts', 'Jack of Hearts', 'Queen of Hearts', 'King of Hearts', 'King of Clubs', 'King of Diamonds']
 player3Hand = []
 player4Hand = []
 player1HandDup = []
 player2HandDup = []
 cribHand = []
-flipCard = ""
+flipCard = "King of Spades"
 deck = []
 player1Score = 0
 player2Score = 0
@@ -160,8 +160,8 @@ def dealCards():
                     player1Hand.append(i)
                     odd = True
             #Get the flip card after ppl have hands
-            elif len(player1Hand) == 6 and len(player2Hand) == 6 and flipCard is not None:
-                flipCard = i
+            # elif len(player1Hand) == 6 and len(player2Hand) == 6 and flipCard is not None:
+            #     flipCard = i
 #Flip dealer and reset hand based vars
 def swapDealer():
     global dealer
@@ -359,20 +359,12 @@ def playGame():
                         player2TotalPegs += 2
                         break
                         lastPlayed = player1LegalCards[playedCard]
-                    if player == 1:
-                        print "\n~~~~~~~~~~~~Player 1 gets a go!~~~~~~~~~~~~"
-                        print "\n***Hand over***"
-                        player1Score += 1
-                        player1HandPegs += 1
-                        player1TotalPegs += 1
-                        handOver = True
-                    if player == 2:
-                        print "\n~~~~~~~~~~~~Player 2 gets a go!~~~~~~~~~~~~"
-                        print "\n***Hand over***"
-                        player2Score += 1
-                        player2HandPegs += 1
-                        player2TotalPegs += 1
-                        handOver = True
+                    print "\n~~~~~~~~~~~~Player 1 gets a go!~~~~~~~~~~~~"
+                    print "\n***Hand over***"
+                    player1Score += 1
+                    player1HandPegs += 1
+                    player1TotalPegs += 1
+                    handOver = True
                 else:
                     player = 2
                     print "lost p1"
@@ -451,20 +443,12 @@ def playGame():
                         player1TotalPegs += 2
                         break
                         lastPlayed = ""
-                    if player == 1:
-                        print "\n~~~~~~~~~~~~Player 1 gets a go!~~~~~~~~~~~~"
-                        print "\n***Hand over***"
-                        player1Score += 1
-                        player1HandPegs += 1
-                        player1TotalPegs += 1
-                        handOver = True
-                    if player == 2:
-                        print "\n~~~~~~~~~~~~Player 2 gets a go!~~~~~~~~~~~~"
-                        print "\n***Hand over***"
-                        player2Score += 1
-                        player2HandPegs += 1
-                        player2TotalPegs += 1
-                        handOver = True
+                    print "\n~~~~~~~~~~~~Player 2 gets a go! 3 ~~~~~~~~~~~~"
+                    print "\n***Hand over***"
+                    player2Score += 1
+                    player2HandPegs += 1
+                    player2TotalPegs += 1
+                    handOver = True
                 else:
                     player = 1
                     print "lost p2"
@@ -659,8 +643,8 @@ def searchForRuns(hand, player):
                         if (checked[i+2]) + 1 == (checked[i+3]):
                             foundRunOf4 = True
                             for j in range(0,4):
-                                for k in range(dups.count(checked[i+j])):
-                                    multiplier += 1
+                                if checked[i+j] in dups:
+                                    multiplier *= 2
                             for i in range(multiplier):
                                 print "Run of 4, for 4"
                             player2Score += (4 * multiplier)
@@ -671,8 +655,8 @@ def searchForRuns(hand, player):
                     if (checked[i]) + 1 == (checked[i+1]):
                         if (checked[i+1]) + 1 == (checked[i+2]):
                             for j in range(0,3):
-                                for k in range(dups.count(checked[i+j])):
-                                    multiplier += 1
+                                if checked[i+j] in dups:
+                                    multiplier *= 2
                             for i in range(multiplier):
                                 print "Run of 3, for 3"
                             player2Score += (3 * multiplier)
@@ -816,9 +800,9 @@ def getLegalCards(hand, count):
 setup()
 dealer = cutForDeal()
 while player1Score < 121 and player2Score < 121:
-    dealCards()
-    player1Hand = sortHand(player1Hand)
-    player2Hand = sortHand(player2Hand)
+    #dealCards()
+    #player1Hand = sortHand(player1Hand)
+    #player2Hand = sortHand(player2Hand)
     throwToCrib()
     playGame()
     countCards()
